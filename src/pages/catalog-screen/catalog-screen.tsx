@@ -6,17 +6,23 @@ import CatalogSort from '../../components/catalog-sort/catalog-sort';
 import Pagination from '../../components/pagination/pagination';
 import ProductCard from '../../components/product-card/product-card';
 import { useAppDispatch, useAppSelector } from '../../hooks/store-hooks';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Status } from '../../consts/enums';
 import Spinner from '../../components/spinner/spinner';
 import ErrorScreen from '../error-screen/error-screen';
+import useCurrentPage from '../../hooks/use-current-page';
+import { MAX_CAMERAS_PER_PAGE } from '../../consts/app';
 import {
   getCameras,
   getPromo,
   selectCameras,
-  selectCamerasStatus, selectPromo,
+  selectCamerasStatus,
+  selectPromo,
   selectPromoStatus
 } from '../../store/catalog-slice/catalog-slice';
+import ScrollToTop from '../../components/scroll-to-top/scroll-to-top';
+import PreviewModal from '../../components/preview-modal/preview-modal';
+import { Camera } from '../../types/camera';
 
 function CatalogScreen() {
   const dispatch = useAppDispatch();
@@ -24,6 +30,17 @@ function CatalogScreen() {
   const promoStatus = useAppSelector(selectPromoStatus);
   const cameras = useAppSelector(selectCameras);
   const promo = useAppSelector(selectPromo);
+  const currentPage = useCurrentPage();
+
+  const [isModalOpened, setModal] = useState(false);
+  const [preview, setPreview] = useState<Camera | null>(null);
+
+  const handlePreviewModalShow = (camera: Camera | null) => {
+    document.body.style.overflow = isModalOpened ? '' : 'hidden';
+
+    setModal(!isModalOpened);
+    setPreview(camera);
+  };
 
   useEffect(() => {
     if (camerasStatus === Status.Idle) {
@@ -46,10 +63,18 @@ function CatalogScreen() {
     return <ErrorScreen variant="error"/>;
   }
 
-  const promoDescription = cameras.find((item)=>item.id === promo.id)?.description;
+  if (!currentPage || currentPage > Math.ceil(cameras.length / MAX_CAMERAS_PER_PAGE)) {
+    return <ErrorScreen variant="404"/>;
+  }
+
+  const promoDescription = cameras.find((item) => item.id === promo.id)?.description;
+  const sliceStart = (currentPage - 1) * MAX_CAMERAS_PER_PAGE;
+  const sliceEnd = sliceStart + MAX_CAMERAS_PER_PAGE;
+  const slicedCameras = cameras.slice(sliceStart, sliceEnd);
 
   return (
     <main>
+      <ScrollToTop/>
       <Helmet>
         <title>Каталог - Фотошоп</title>
       </Helmet>
@@ -64,14 +89,26 @@ function CatalogScreen() {
               <div className="catalog__content">
                 <CatalogSort/>
                 <div className="cards catalog__cards">
-                  {cameras.map((camera) => <ProductCard key={camera.id} camera={camera}/>)}
+                  {slicedCameras
+                    .map((camera) =>
+                      (
+                        <ProductCard
+                          key={camera.id}
+                          camera={camera}
+                          onReviewButtonClick={handlePreviewModalShow}
+                        />))}
                 </div>
-                <Pagination/>
+                <Pagination camerasCount={cameras.length}/>
               </div>
             </div>
           </div>
         </section>
       </div>
+      <PreviewModal
+        preview={preview}
+        isOpened={isModalOpened}
+        onCloseButtonClick={handlePreviewModalShow}
+      />
     </main>
   );
 }
