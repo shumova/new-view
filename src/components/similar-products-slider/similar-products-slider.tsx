@@ -27,6 +27,7 @@ function SimilarProductsSlider({ products }: SimilarProductsSliderProps) {
         }}
         className="product-similar__slider-list"
         slidesPerView={3}
+        slidesPerGroup={3}
         spaceBetween={30}
         allowTouchMove={false}
       >
@@ -35,7 +36,8 @@ function SimilarProductsSlider({ products }: SimilarProductsSliderProps) {
             <ProductCard
               style={{
                 display: 'block',
-                width: '100%'
+                width: '100%',
+                margin: '0'
               }}
               camera={product}
             />
