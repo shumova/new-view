@@ -44,8 +44,10 @@ function PriceFilter({ min, max }: CatalogFilterProps) {
 
   const handleMinPriceChange = (evt: EvtChange) => {
     const price = +evt.target.value < 0 || evt.target.value === '-0' ? '' : evt.target.value;
+
     if (maxPrice && +evt.target.value > +maxPrice) {
       SetMaxPrice(evt.target.value);
+      SetMinPrice(evt.target.value);
       debounced();
     } else {
       SetMinPrice(price);
@@ -55,7 +57,6 @@ function PriceFilter({ min, max }: CatalogFilterProps) {
 
   const handleMaxPriceChange = (evt: EvtChange) => {
     const price = +evt.target.value < 0 || evt.target.value === '-0' ? '' : evt.target.value;
-
 
     if (price && +price > +max) {
       debounced();
@@ -71,6 +72,11 @@ function PriceFilter({ min, max }: CatalogFilterProps) {
     if (price && +price < +min) {
       debounced();
       SetMinPrice(min);
+    }
+
+    if (price && +price > +max) {
+      debounced();
+      SetMinPrice(max);
     }
   };
 
