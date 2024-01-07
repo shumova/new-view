@@ -3,7 +3,7 @@ import { formatPrice } from '../../utiils/formaters';
 import { categoryFilter } from '../../consts/filter';
 import { typeNameToFormattedName } from '../../consts/format';
 import clsx from 'clsx';
-import { ChangeEventHandler, KeyboardEventHandler, useEffect, useRef, useState } from 'react';
+import React, { KeyboardEventHandler, ReactNode, useEffect, useRef } from 'react';
 import { Code } from '../../consts/enums';
 import { useAppDispatch } from '../../hooks/store-hooks';
 import { changeCount, decreaseCount, increaseCount } from '../../store/basket-slice/basket-slice';
@@ -13,12 +13,24 @@ import { OutletContext } from '../../types/app';
 
 type BasketPreviewProps = {
   preview: Camera | undefined;
-  variant?: 'short' | 'primary' | 'basketModal' | 'previewModal';
+  variant?: 'short' | 'primary' | 'basketModal';
+}
+
+
+function Div({ children, ...rest }: { children: ReactNode; className: string }) {
+  return (
+    <div {...rest}>{children}</div>
+  );
+}
+
+function Li({ children, ...rest }: { children: ReactNode; className: string }) {
+  return (
+    <li {...rest}> {children}</li>
+  );
 }
 
 function BasketPreview({ preview, variant = 'primary' }: BasketPreviewProps) {
   const ref = useRef<HTMLInputElement>(null);
-  const [count, setCount] = useState(preview?.count || MIN_BASKET_PRODUCTS.toString());
   const dispatch = useAppDispatch();
   const { setPreviewDisplay } = useOutletContext<OutletContext>();
 
@@ -37,22 +49,16 @@ function BasketPreview({ preview, variant = 'primary' }: BasketPreviewProps) {
   }, [preview?.count]);
 
   const checkCount = () => {
-    if (!preview) {
+    if (!ref.current || !preview) {
       return;
     }
 
-    let value = Number(count);
+    let value = Number(ref.current.value);
 
     value = value > MAX_BASKET_PRODUCTS ? MAX_BASKET_PRODUCTS : value;
     value = value < MIN_BASKET_PRODUCTS ? MIN_BASKET_PRODUCTS : value;
 
-    setCount(value);
     dispatch(changeCount({ count: value, id: preview.id }));
-  };
-
-  const handleCountChange: ChangeEventHandler<HTMLInputElement> = (evt) => {
-    const value = Number.isNaN(+evt.target.value) ? 1 : evt.target.value;
-    setCount(value);
   };
 
   const handleCountBlur = () => {
@@ -94,13 +100,13 @@ function BasketPreview({ preview, variant = 'primary' }: BasketPreviewProps) {
     number = number >= MAX_BASKET_PRODUCTS ? MAX_BASKET_PRODUCTS : ++number;
     ref.current.value = number.toString();
   };
+  const Element = variant === 'primary' ? Li : Div;
 
   return (
-    <div className={clsx('basket-item', {
+    <Element className={clsx('basket-item', {
       'basket-item--short':
         variant === 'short' ||
-        variant === 'previewModal' ||
-        variant === 'basketModal'
+        variant === 'basketModal',
     })}
     >
       <div className="basket-item__img">
@@ -166,9 +172,7 @@ function BasketPreview({ preview, variant = 'primary' }: BasketPreviewProps) {
               min="1"
               max="99"
               aria-label="количество товара"
-              value={count}
               onBlur={handleCountBlur}
-              onChange={handleCountChange}
               onKeyDown={handleInputKeyDown}
             />
             <button
@@ -195,7 +199,7 @@ function BasketPreview({ preview, variant = 'primary' }: BasketPreviewProps) {
             </svg>
           </button>
         </>}
-    </div>
+    </Element>
   );
 }
 
