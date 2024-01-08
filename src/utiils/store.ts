@@ -1,6 +1,7 @@
 import { EntityAdapter, EntityId, EntityState } from '@reduxjs/toolkit';
 import { RootState } from '../types/store';
 import { LOCAL_STORAGE_BASKET } from '../consts/app';
+import { Status } from '../consts/enums';
 
 const getInitialEntityAdapterState = <T, S extends object>(
   adapter: EntityAdapter<T>,
@@ -18,14 +19,20 @@ const getInitialEntityAdapterState = <T, S extends object>(
   return adapter.getInitialState<S>(initialState);
 };
 
-
 const calculateTotalWithCoupon = (state: RootState['basket'], bonus: number) => {
   state.coupon = Math.round((bonus / 100) * state.total);
   state.totalWithCoupon = state.total - state.coupon;
 };
 
 const saveToLocalStorage = (state: RootState['basket']) => {
-  const data = { ...state, totalWithCoupon: 0, coupon: 0, couponPercent: 0, couponName: '' } as RootState['basket'];
+  const data = {
+    ...state,
+    totalWithCoupon: 0,
+    coupon: 0,
+    couponPercent: 0,
+    couponName: '',
+    couponStatus: Status.Idle,
+  } as RootState['basket'];
   localStorage.setItem(LOCAL_STORAGE_BASKET, JSON.stringify(data));
 };
 

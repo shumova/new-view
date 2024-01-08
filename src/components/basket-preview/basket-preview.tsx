@@ -3,8 +3,8 @@ import { formatPrice } from '../../utiils/formaters';
 import { categoryFilter } from '../../consts/filter';
 import { typeNameToFormattedName } from '../../consts/format';
 import clsx from 'clsx';
-import React, { KeyboardEventHandler, ReactNode, useEffect, useRef } from 'react';
-import { Code } from '../../consts/enums';
+import React, { KeyboardEventHandler, ReactNode, useEffect, useRef, useState } from 'react';
+import { BasketPreviewVariant, Code } from '../../consts/enums';
 import { useAppDispatch } from '../../hooks/store-hooks';
 import { changeCount, decreaseCount, increaseCount } from '../../store/basket-slice/basket-slice';
 import { MAX_BASKET_PRODUCTS, MIN_BASKET_PRODUCTS } from '../../consts/app';
@@ -13,26 +13,26 @@ import { OutletContext } from '../../types/app';
 
 type BasketPreviewProps = {
   preview: Camera | undefined;
-  variant?: 'short' | 'primary' | 'basketModal';
+  variant?: BasketPreviewVariant;
 }
 
-function Div({ children, ...rest }: { children: ReactNode; className: string }) {
+function SingleItem({ children, ...rest }: { children: ReactNode; className: string }) {
   return (
     <div {...rest}>{children}</div>
   );
 }
 
-function Li({ children, ...rest }: { children: ReactNode; className: string }) {
+function ListItem({ children, ...rest }: { children: ReactNode; className: string }) {
   return (
     <li {...rest}> {children}</li>
   );
 }
 
-function BasketPreview({ preview, variant = 'primary' }: BasketPreviewProps) {
+function BasketPreview({ preview, variant = BasketPreviewVariant.Primary }: BasketPreviewProps) {
   const ref = useRef<HTMLInputElement>(null);
   const dispatch = useAppDispatch();
   const { setPreviewDisplay } = useOutletContext<OutletContext>();
-
+  const [, setInit] = useState(false);
   const typeName = preview?.category === categoryFilter.video.ruName
     ? preview?.type
     : typeNameToFormattedName[preview?.type as keyof typeof typeNameToFormattedName];
@@ -45,16 +45,23 @@ function BasketPreview({ preview, variant = 'primary' }: BasketPreviewProps) {
     ref.current.value = preview.count.toString();
   }, [preview?.count]);
 
+
+  useEffect(() => {
+    setInit(true);
+  }, []);
+
   const checkCount = () => {
     if (!ref.current || !preview) {
       return;
     }
 
-    let value = Number(ref.current.value);
+    let value = Math.floor(Number(ref.current.value));
+
 
     value = value > MAX_BASKET_PRODUCTS ? MAX_BASKET_PRODUCTS : value;
     value = value < MIN_BASKET_PRODUCTS ? MIN_BASKET_PRODUCTS : value;
 
+    ref.current.value = value.toString();
     dispatch(changeCount({ count: value, id: preview.id }));
   };
 
@@ -98,13 +105,13 @@ function BasketPreview({ preview, variant = 'primary' }: BasketPreviewProps) {
     ref.current.value = number.toString();
   };
 
-  const Element = variant === 'primary' ? Li : Div;
+  const Item = variant === BasketPreviewVariant.Primary ? ListItem : SingleItem;
 
   return (
-    <Element className={clsx('basket-item', {
+    <Item className={clsx('basket-item', {
       'basket-item--short':
-        variant === 'short' ||
-        variant === 'basketModal',
+        variant === BasketPreviewVariant.Short ||
+        variant === BasketPreviewVariant.BasketModal,
     })}
     >
       <div className="basket-item__img">
@@ -140,13 +147,13 @@ function BasketPreview({ preview, variant = 'primary' }: BasketPreviewProps) {
           </li>
           <li className="basket-item__list-item">{preview?.level} уровень</li>
         </ul>
-        {variant === 'short' &&
+        {variant === BasketPreviewVariant.Short &&
           <p className="basket-item__price">
             <span className="visually-hidden">Цена:</span>
             {formatPrice(preview?.price || 0)} ₽
           </p>}
       </div>
-      {variant === 'primary' &&
+      {variant === BasketPreviewVariant.Primary &&
         <>
           <p className="basket-item__price">
             <span className="visually-hidden">Цена:</span>
@@ -157,6 +164,7 @@ function BasketPreview({ preview, variant = 'primary' }: BasketPreviewProps) {
               onClick={handleDecrease}
               className="btn-icon btn-icon--prev"
               aria-label="уменьшить количество товара"
+              disabled={ref.current ? +ref.current.value === MIN_BASKET_PRODUCTS : undefined}
             >
               <svg width="7" height="12" aria-hidden="true">
                 <use xlinkHref="#icon-arrow"></use>
@@ -165,7 +173,7 @@ function BasketPreview({ preview, variant = 'primary' }: BasketPreviewProps) {
             <label className="visually-hidden" htmlFor="counter1"></label>
             <input
               ref={ref}
-              type="text"
+              type="number"
               id="counter1"
               min="1"
               max="99"
@@ -174,6 +182,7 @@ function BasketPreview({ preview, variant = 'primary' }: BasketPreviewProps) {
               onKeyDown={handleInputKeyDown}
             />
             <button
+              disabled={ref.current ? +ref.current.value === MAX_BASKET_PRODUCTS : undefined}
               onClick={handleIncrease}
               className="btn-icon btn-icon--next"
               aria-label="увеличить количество товара"
@@ -197,7 +206,7 @@ function BasketPreview({ preview, variant = 'primary' }: BasketPreviewProps) {
             </svg>
           </button>
         </>}
-    </Element>
+    </Item>
   );
 }
 
