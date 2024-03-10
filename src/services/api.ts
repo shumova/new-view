@@ -4,7 +4,7 @@ import { NewReview, Review } from '../types/review';
 import { NewOrder } from '../types/order';
 import { ApiRoute } from '../consts/enums';
 
-const BACKEND_URL = 'https://camera-shop.accelerator.pages.academy';
+const BACKEND_URL = 'https://camera-shop.accelerator.htmlacademy.pro';
 const REQUEST_TIMEOUT = 5000;
 
 const api = axios.create({
