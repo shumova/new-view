@@ -1,14 +1,18 @@
-🛠️ Technologies
+### 📝 Description
+Online store of photo and video equipment. Working with data and an address bar (query parameters), filtering, sorting data, pagination, adding and removing products from a cart, promo codes, ordering, uploading and publishing product reviews, form validation, carousel and tabs, unit testing and error handling (redirect to 404, toastify). The project layout was done by another developer.
+
+### 🛠️ Technologies 
 React, TypeScript, Redux Thunk, Jest, React Testing Library, Axios, Toastify, React Hook Form, Webpack
 
-📝 Description
-Online store of photo and video equipment. Working with data and an address bar (query parameters), filtering, sorting data, pagination, adding and removing products from a cart, promo codes, ordering, uploading and publishing product reviews, form validation, carousel and tabs, unit testing and error handling (redirect to 404, toastify). The project layout was done by another developer.
+### 🔗 Links 
+> **Live Site**: [new-view.vercel.app](https://new-view.vercel.app/catalog)  
+> **Source Code**: [github.com/shumova/new-view](https://github.com/shumova/new-view)
+
+---
 
 <img width="2700" height="1700" alt="image" src="https://github.com/user-attachments/assets/c301d4f9-0ee6-47df-95f1-86fc7c404135" />
 
-
-
-
+---
 
 # Project Guide
 
