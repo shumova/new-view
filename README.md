@@ -1,7 +1,8 @@
-Интернет-магазин фото- и видеотехники. Работа с данными и адресной строкой (параметры запросов), фильтрация, сортировка данных, пагинация, добавление и удаление товаров из корзины, промокоды, оформление заказов, загрузка и публикация отзывов, валидация форм, карусель и вкладки, модульное тестирование и обработка ошибок (редирект на 404, toastify). 
-Верстка проекта была выполнена другим разработчиком.
+🛠️ Technologies
+React, TypeScript, Redux Thunk, Jest, React Testing Library, Axios, Toastify, React Hook Form, Webpack
 
-Технологии: React, TypeScript, Redux Thunk, Jest, React Testing Library, Axios, Toastify, React Hook Form, Webpack
+📝 Description
+Online store of photo and video equipment. Working with data and an address bar (query parameters), filtering, sorting data, pagination, adding and removing products from a cart, promo codes, ordering, uploading and publishing product reviews, form validation, carousel and tabs, unit testing and error handling (redirect to 404, toastify). The project layout was done by another developer.
 
 <img width="2700" height="1700" alt="image" src="https://github.com/user-attachments/assets/c301d4f9-0ee6-47df-95f1-86fc7c404135" />
 
@@ -9,91 +10,91 @@
 
 
 
-# Руководство по работе с проектом
+# Project Guide
 
-Данный проект создан с помощью [Create React App](https://github.com/facebook/create-react-app).
+This project was created with the help of [Create React App](https://github.com/facebook/create-react-app).
 
-## Структура проекта
+## Project structure
 
 ---
 
-_Не удаляйте и не изменяйте папки и файлы:_
+_Do not delete or modify folders or files:_
 _`.editorconfig`, `.gitattributes`, `.gitignore`, `package.json`._
 
 ---
 
 ### public
 
-Директория для размещения статичных ресурсов (шрифты, стили, изображения и так далее). Корневая директория проекта.
+Directory for placing static resources (fonts, styles, images, etc.). Root directory of the project.
 
-**Обратите внимание**, файл `Readme.md`, в директории `public`, содержит описание подготовительного процесса, который вам необходимо выполнить перед тем, как приступать к работе над проектом.
+**Please note** the `Readme.md` file in the `public` directory contains a description of the preparation process you need to complete before you can begin working on the project.
 
 ### src
 
-В директории размещаются исходный код проекта: компоненты, файлы с тестами, модули и так далее. Структура директории `src` может быть произвольной.
+The directory contains the source code of the project: components, test files, modules, etc. The structure of the `src` directory can be arbitrary.
 
-## Сценарии
+## Scenarios
 
-После создания проекта вам доступны следующие сценарии. Обратите внимание, для запуска сценария, вы должны находится в директории проекта (`./project`).
+After creating a project, the following scripts are available to you. Please note that to run a script, you must be in the project directory (`./project`).
 
-### Запуск проекта
+### Project launch
 
 ```bash
 npm start
 ```
 
-После запуска, приложение доступно для просмотра в браузере по адресу [http://localhost:3000](http://localhost:3000).
+Once launched, the application is available for viewing in a browser at [http://localhost:3000](http://localhost:3000).
 
-При сохранении изменений, проект перезапускается и обновляется в браузере. Таким образом, вы можете следить за разработкой проекта в режиме реального времени.
+When you save changes, the project is restarted and updated in the browser. This way, you can follow the development of the project in real time.
 
-**Обратите внимание**, режим разработки настроен таким образом, при котором ошибки, найденные статическим анализатором кода **ESLint**, отображаются в той же вкладке браузера, в которой запущен проект.
+**Please note** that the development mode is configured in such a way that errors found by the **ESLint** static code analyzer are displayed in the same browser tab in which the project is running.
 
-### Запуск тестов
+### Running tests
 
 ```bash
 npm test
 ```
 
-Запуск тестов приложения в интерактивном режиме.
+Running application tests in interactive mode.
 
-В данном случае, имеются в виду тесты, которые вынесены в отдельные файлы, в имени которых присутствует суффикс `*.test.*`. Например, `app.test.tsx`.
+In this case, we mean tests that are placed in separate files with the suffix `*.test.*` in their names. For example, `app.test.tsx`.
 
-Подробную информацию вы можете найти на странице [Запуск тестов](https://facebook.github.io/create-react-app/docs/running-tests).
+For more information, please visit the page [Running Tests](https://facebook.github.io/create-react-app/docs/running-tests).
 
-### Проверка линтером
+### Linter check
 
 ```bash
 npm run lint
 ```
 
-Запуск проверки проекта статическим анализатором кода **ESLint**.
+Launching a project check by the **ESLint** static code analyzer.
 
-Анализ кода производится только в файлах, которые находятся в директории `src`.
+Code analysis is performed only in files located in the `src` directory.
 
-**Обратите внимание**, при запуске данной команды, ошибки выводятся в терминал.
+**Please note** that when running this command, errors are output to the terminal.
 
-### Сборка проекта
+### Building the project
 
 ```bash
 npm run build
 ```
 
-Запуск сборки приложения.
+Starting the application build.
 
-В процессе сборки приложения, код приложения оптимизируется и минимизируется, для достижения наилучшей производительности.
+During the application build process, the application code is optimized and minified to achieve the best performance.
 
-Во время выполнения инструкций по сборке проекта, в корне проекта создается директория `build`, в которую будут помещены результирующие файлы. После сборки проект готов к публикации.
+During the execution of the project build instructions, a `build` directory is created in the project root, where the resulting files will be placed. After the build, the project is ready for publication.
 
-Подробную информацию вы можете найти на странице [Развертывание проекта](https://facebook.github.io/create-react-app/docs/deployment).
+Detailed information can be found on the page [Project Deployment](https://facebook.github.io/create-react-app/docs/deployment).
 
-### Извлечение конфигурации проекта
+### Retrieving Project Configuration
 
 ```bash
 npm run eject
 ```
 
-**Обратите внимание**, при запуске команды `npm run eject` нет возможности вернуть внесённые изменения обратно!
+**Please note** that when you run `npm run eject` there is no way to revert the changes you made!
 
-Выполнение данной команды, `react-scripts` скопирует все конфигурационные файлы и скрипты в корень проекта. Данный процесс позволяет получить полный контроль над конфигурацией проекта.
+Running this command, `react-scripts` will copy all configuration files and scripts to the root of the project. This process allows you to get full control over the project configuration.
 
-Не используйте данную команду, если не уверены как именно она работает или к какому результату приведёт ее выполнение.
+Do not use this command if you are not sure how it works or what result it will lead to.
